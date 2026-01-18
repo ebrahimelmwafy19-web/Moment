@@ -1,10 +1,13 @@
 "use client";
 
+"use client";
+
 import { useParams } from "next/navigation";
-import Sidebar from "./components/Sidebar";
-import ChatHeader from "./components/ChatHeader";
-import Messages from "./components/Messages";
-import MessageInput from "./components/MessageInput";
+// غيرنا المسار بإضافة نقطة زيادة (..)
+import Sidebar from "../components/Sidebar"; 
+import ChatHeader from "../components/ChatHeader";
+import Messages from "../components/Messages";
+import MessageInput from "../components/MessageInput";
 
 export default function PrivateChatPage() {
   const params = useParams();
@@ -32,7 +35,8 @@ export default function PrivateChatPage() {
         {/* منطقة الكتابة - ترسل الرسالة لهذه الغرفة فقط */}
         <div className="p-6">
           <div className="bg-white/5 border border-white/10 rounded-3xl p-2 backdrop-blur-md">
-            <MessageInput roomId={roomId} />
+            {roomId && <MessageInput roomId={roomId} />}
+
           </div>
           
         </div>

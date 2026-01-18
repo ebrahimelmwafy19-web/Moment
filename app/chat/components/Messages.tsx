@@ -4,16 +4,12 @@ import MessageBubble from "./MessageBubble";
 import { auth } from "@/app/login/firebase";
 import { useEffect, useRef } from "react";
 
-// 1. ضيف الـ Interface هنا
 interface MessagesProps {
   roomId: string;
 }
 
-// 2. استقبل الـ roomId في المكون
 export default function Messages({ roomId }: MessagesProps) {
-  // 3. مرر الـ roomId للـ Hook (تأكد إن الـ Hook بتاعك بيدعم ده)
   const { messages, loading } = useMessages(roomId); 
-  
   const currentUser = auth.currentUser;
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -29,17 +25,21 @@ export default function Messages({ roomId }: MessagesProps) {
 
   return (
     <div className="flex flex-col py-4 overflow-y-auto custom-scrollbar h-full">
-{messages.map((msg: any) => (
-  <MessageBubble 
+      {/* التعديل هنا: شيلنا الـ :any عشان الـ TS يستنتج البيانات لوحده */}
+{messages.map((msg) => (
+  <MessageBubble
     key={msg.id}
-    id={msg.id} // هنحتاج الـ id عشان المسح
-    text={msg.text} 
-    audioUrl={msg.audioUrl} 
-    type={msg.type || "text"} // لو مفيش نوع، اعتبره نص افتراضياً
-    isMe={msg.senderId === currentUser?.uid} 
-    time={msg.timestamp?.toDate().toLocaleTimeString()} 
+    id={msg.id}
+    roomId={roomId} // بنمرر الـ roomId اللي جاي من الـ Props بتاعة المكون نفسه
+    text={msg.text}
+    senderId={msg.senderId}
+    audioUrl={msg.audioUrl}
+    type={msg.type as "text" | "audio"} // تحديد النوع بدقة لـ TS
+    isMe={msg.senderId === auth.currentUser?.uid}
+    time={msg.time}
   />
 ))}
+
       
       <div ref={scrollRef} />
 
